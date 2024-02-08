@@ -129,7 +129,8 @@ Widget _buildProductImages() {
               borderRadius: BorderRadius.circular(0.0),
               image: DecorationImage(
                 //image: NetworkImage(imageUrl),
-                image: CachedNetworkImageProvider(imageUrl),
+                image: AssetImage('assets/images/$imageUrl'),
+                //image: CachedNetworkImageProvider(imageUrl),
                 fit: BoxFit.cover,
               ),
             ),

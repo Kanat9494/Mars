@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:flutter/rendering.dart';
 import 'package:mars/second.dart';
 import 'package:cached_network_image/cached_network_image.dart';
 
@@ -59,34 +60,63 @@ class MyHomePage extends StatefulWidget {
 }
 
 class _MyHomePageState extends State<MyHomePage> {
-  int _counter = 0;
+  final _scrollController = ScrollController();
+  double _bottomBarHeight = 60.0;
 
-  void _incrementCounter() {
+  @override
+  void initState(){
+    super.initState();
+
+    _scrollController.addListener(() {
+if (_scrollController.position.userScrollDirection ==
+        ScrollDirection.reverse) {
+          hideBottomBar();
+        }
+        else {
+          showBottomBar();
+        }
+    });
+  }
+
+  @override
+  void dispose() { 
+    _scrollController.dispose();
+
+   super.dispose(); 
+  }
+
+  void showBottomBar(){
     setState(() {
-      // This call to setState tells the Flutter framework that something has
-      // changed in this State, which causes it to rerun the build method below
-      // so that the display can reflect the updated values. If we changed
-      // _counter without calling setState(), then the build method would not be
-      // called again, and so nothing would appear to happen.
-      _counter++;
+      _bottomBarHeight = 60;
+    });
+  }
+
+  void hideBottomBar(){
+    setState(() {
+      _bottomBarHeight = 0;
     });
   }
 
   @override
   Widget build(BuildContext context) {
-    // This method is rerun every time setState is called, for instance as done
-    // by the _incrementCounter method above.
-    //
-    // The Flutter framework has been optimized to make rerunning build methods
-    // fast, so that you can just rebuild anything that needs updating rather
-    // than having to individually change instances of widgets.
+// SystemChrome.setSystemUIOverlayStyle(SystemUiOverlayStyle.dark.copyWith(
+//       statusBarIconBrightness: Brightness.dark, 
+//       systemNavigationBarColor:
+//           Colors.black.withOpacity(0.5),// Icon color of the bottom status bar
+//     ));
+
+    
     return Scaffold(
+      backgroundColor: const Color.fromARGB(245, 250, 245, 250),
+
       body: CustomScrollView(
+        controller: _scrollController,
         slivers: [
           SliverAppBar(
-            expandedHeight: 115.0,
+            expandedHeight: 100.0,
+            toolbarHeight: 100.0,
             floating: true,
-            backgroundColor: Colors.transparent,
+            backgroundColor:  const Color.fromARGB(255, 22, 9, 206),
             // backgroundColor:
             //     const Color.fromARGB(255, 22, 9, 206), // Розовый фон
             shape: const RoundedRectangleBorder(
@@ -95,26 +125,15 @@ class _MyHomePageState extends State<MyHomePage> {
                 bottomRight: Radius.circular(20.0), // Нижний правый угол
               ),
             ),
-            flexibleSpace: FlexibleSpaceBar(
-              titlePadding: const EdgeInsets.only(left: 0, right: 0),
-             centerTitle: true,
-              title: Container(
-                decoration: const BoxDecoration(
-              color:  Color.fromARGB(255, 22, 9, 206),
-              borderRadius: BorderRadius.only(
-                bottomLeft:
-                    Radius.circular(20), // Закругление левого нижнего угла
-                bottomRight:
-                    Radius.circular(20), // Закругление правого нижнего угла
-              ),
-            ),
-
+            title: SizedBox(
+                height: 110.0,
+              
                
                 child: Column(
                 mainAxisAlignment: MainAxisAlignment.start,
                 children: [
                   const SizedBox(
-                    height: 70.0,
+                    height: 10.0,
                   ),
                   const Text(
                     'Текст по середине',
@@ -125,16 +144,16 @@ class _MyHomePageState extends State<MyHomePage> {
                   ),
                   const SizedBox(height: 8.0),
                   Container(
-                    margin: const EdgeInsets.symmetric(horizontal: 6.0),
-                    height: 35.0,
+                    //margin: const EdgeInsets.symmetric(horizontal: 6.0),
+                    height: 55.0,
                     decoration: BoxDecoration(
                       color: Colors.white,
-                      borderRadius: BorderRadius.circular(10.0),
+                      borderRadius: BorderRadius.circular(15.0),
                     ),
                     child: const TextField(
                       decoration: InputDecoration(
                         hintText: 'Поиск',
-                        hintStyle: TextStyle(fontSize: 14.0),
+                        hintStyle: TextStyle(fontSize: 22.0),
                         border: InputBorder.none,
                         icon: Icon(Icons.search),
                       ),
@@ -142,11 +161,69 @@ class _MyHomePageState extends State<MyHomePage> {
                   ),
                 ],
               ),
-              )
-            ),
+              ),
+            // flexibleSpace: FlexibleSpaceBar(
+            //   titlePadding: const EdgeInsets.only(left: 0, right: 0),
+            //  centerTitle: true,
+            //   title: Container(
+            //     decoration: const BoxDecoration(
+            //   color:  Color.fromARGB(255, 22, 9, 206),
+            //   borderRadius: BorderRadius.only(
+            //     bottomLeft:
+            //         Radius.circular(20), // Закругление левого нижнего угла
+            //     bottomRight:
+            //         Radius.circular(20), // Закругление правого нижнего угла
+            //   ),
+            // ),
+
+               
+            //     child: Column(
+            //     mainAxisAlignment: MainAxisAlignment.start,
+            //     children: [
+            //       const SizedBox(
+            //         height: 70.0,
+            //       ),
+            //       const Text(
+            //         'Текст по середине',
+            //         style: TextStyle(
+            //           color: Colors.white,
+            //           fontSize: 16.0,
+            //         ),
+            //       ),
+            //       const SizedBox(height: 8.0),
+            //       Container(
+            //         margin: const EdgeInsets.symmetric(horizontal: 6.0),
+            //         height: 35.0,
+            //         decoration: BoxDecoration(
+            //           color: Colors.white,
+            //           borderRadius: BorderRadius.circular(10.0),
+            //         ),
+            //         child: const TextField(
+            //           decoration: InputDecoration(
+            //             hintText: 'Поиск',
+            //             hintStyle: TextStyle(fontSize: 14.0),
+            //             border: InputBorder.none,
+            //             icon: Icon(Icons.search),
+            //           ),
+            //         ),
+            //       ),
+            //     ],
+            //   ),
+            //   )
+            // ),
           ),
 
-          SliverFixedExtentList(
+
+          const SliverToBoxAdapter(
+            child: SizedBox(height: 10.0),
+          ),
+
+          DecoratedSliver(
+            decoration: const BoxDecoration(
+              color: Colors.white,
+              borderRadius: BorderRadius.all(Radius.circular(20.0))
+            ),
+            sliver: SliverFixedExtentList(
             itemExtent: 225,
             delegate: SliverChildBuilderDelegate(
               (BuildContext context, int index) {
@@ -167,20 +244,45 @@ class _MyHomePageState extends State<MyHomePage> {
             ),
 
 ),
-          const SliverToBoxAdapter(child: const SizedBox(height: 10.0),),
-          SliverPadding(
-  padding: const EdgeInsets.only(right: 8.0, left: 8.0),
+          ),
+
+          const SliverToBoxAdapter(
+            child: SizedBox(height: 10.0),
+          ),
+
+SliverToBoxAdapter(
+  child: Container(
+  decoration: BoxDecoration(
+    borderRadius: BorderRadius.circular(20.0),
+    color: Colors.white,
+  ),
+  padding: const EdgeInsets.all(10.0),
+  child: ClipRRect(
+    borderRadius: BorderRadius.circular(20.0),
+    child: Image.asset(
+      'assets/images/12.jpg',
+      height: 220.0,
+      fit: BoxFit.cover,
+    ),
+  ),
+)
+),
+          const SliverToBoxAdapter(child: SizedBox(height: 10.0),),
+          DecoratedSliver(
+            decoration: const BoxDecoration(color: Colors.white, borderRadius: BorderRadius.all(Radius.circular(20.0))),
+            sliver: SliverPadding(
+  padding: const EdgeInsets.only(right: 8.0, left: 8.0, top: 20.0),
   sliver: SliverGrid(
     gridDelegate: const SliverGridDelegateWithFixedCrossAxisCount(
       crossAxisCount: 2,
       childAspectRatio: 3 / 5,
       mainAxisSpacing: 10.0,
       crossAxisSpacing: 5.0,
-      mainAxisExtent: 355.0
+      mainAxisExtent: 365.0
     ),
     delegate: SliverChildBuilderDelegate(
       (BuildContext context, int index) {
-        // print(index);
+        //print(index);
         //final itemIndex = index % allItems3.length; // Handle index overflow
         final item = allItems3[index];
       
@@ -191,24 +293,43 @@ class _MyHomePageState extends State<MyHomePage> {
   ),
   
 ),
+          ),
         ],
       ),
-     floatingActionButton:  Container(
-          width: double.infinity, // Растягиваем на всю ширину
-          padding: EdgeInsets.symmetric(horizontal: 16.0), // Произвольные отступы по бокам
-          child: FloatingActionButton(
-            onPressed: () {
-              // Handle button press
-            },
-            backgroundColor: const Color.fromARGB(255, 22, 9, 206),
-            tooltip: 'Increment',
-            child: const Text('В корзину', style: TextStyle(color: Colors.white, fontSize: 18)),
-          ),),
-        floatingActionButtonLocation: FloatingActionButtonLocation.centerFloat,
+    //  floatingActionButton:  Container(
+    //       width: double.infinity, // Растягиваем на всю ширину
+    //       padding: EdgeInsets.symmetric(horizontal: 16.0), // Произвольные отступы по бокам
+    //       child: FloatingActionButton(
+    //         onPressed: () {
+    //           // Handle button press
+    //         },
+    //         backgroundColor: const Color.fromARGB(255, 22, 9, 206),
+    //         tooltip: 'Increment',
+    //         child: const Text('В корзину', style: TextStyle(color: Colors.white, fontSize: 18)),
+    //       ),),
+    //     floatingActionButtonLocation: FloatingActionButtonLocation.centerFloat,
+        bottomNavigationBar: AnimatedBuilder(
+          animation: _scrollController,
+          builder: (context, child) {
+            return AnimatedContainer(
+              duration: const Duration(milliseconds: 300),
+              height: _bottomBarHeight,
+              child: child,
+            );
+          },
+          child: BottomNavigationBar(
+          showSelectedLabels: false,
+          showUnselectedLabels: false,
+          items: const [
+            BottomNavigationBarItem(icon: Icon(Icons.home_outlined, size: 35), label: ''),
+            BottomNavigationBarItem(icon: Icon(Icons.account_circle_outlined, size: 35), label: '')
+
+          ],
+        ),
+        )
     );
   }
 }
-
 
 class MarketplaceItemCard extends StatelessWidget {
   final Item item;
@@ -298,7 +419,7 @@ class MarketplaceItemCard extends StatelessWidget {
 return Container(
   margin: const EdgeInsets.all(3.0),
   decoration: BoxDecoration(
-            borderRadius: BorderRadius.circular(10.0)),
+            borderRadius: BorderRadius.circular(20.0)),
   child: Stack(
     children: [
       Column(
@@ -308,7 +429,7 @@ return Container(
               aspectRatio: 0.8,
              
               child: ClipRRect(
-                borderRadius: BorderRadius.circular(10.0),
+                borderRadius: BorderRadius.circular(20.0),
                 child: CachedNetworkImage(
                   imageUrl: item.imageUrl,
                   fit: BoxFit.cover,
@@ -340,14 +461,17 @@ return Container(
                 color: Colors.grey[600],
               ),
             ),
-            MaterialButton(
+            Container(
+              margin: const EdgeInsets.only(left: 8.0, bottom: 8.0),
+              child: MaterialButton(
   onPressed: () {},
   color: const Color.fromARGB(255, 22, 9, 206),
   shape: RoundedRectangleBorder(
     borderRadius: BorderRadius.circular(10.0), // Указываете радиус закругления
   ),
   child: const Text('В корзину', style: TextStyle(color: Colors.white)),
-)
+),
+            )
           ],
         ),
 
@@ -355,7 +479,7 @@ return Container(
               child: Material(
                 color: Colors.transparent,
                 child: InkWell(
-                  borderRadius: BorderRadius.circular(10.0),
+                  borderRadius: BorderRadius.circular(20.0),
                   splashColor:
                       Colors.grey.withOpacity(0.4), // Цвет волны при нажатии
                   highlightColor: Colors.grey.withOpacity(0.3),
@@ -450,9 +574,7 @@ class PopularItemCard extends StatelessWidget {
         child: Column(
         children: <Widget>[
             Ink.image(
-              image: NetworkImage(
-              item.imageUrl,
-            ),
+              image: const AssetImage('assets/images/12.jpg'),
 
 
             
