@@ -2,6 +2,8 @@ import 'package:flutter/material.dart';
 import 'package:flutter/rendering.dart';
 import 'package:mars/second.dart';
 import 'package:cached_network_image/cached_network_image.dart';
+import 'package:carousel_slider/carousel_slider.dart';
+
 
 
 void main() {
@@ -107,7 +109,7 @@ if (_scrollController.position.userScrollDirection ==
 
     
     return Scaffold(
-      backgroundColor: const Color.fromARGB(245, 250, 245, 250),
+      backgroundColor: const Color.fromARGB(235, 236, 235, 235),
 
       body: CustomScrollView(
         controller: _scrollController,
@@ -213,18 +215,40 @@ if (_scrollController.position.userScrollDirection ==
             // ),
           ),
 
-
-          const SliverToBoxAdapter(
-            child: SizedBox(height: 10.0),
-          ),
+          SliverToBoxAdapter(
+  child: Container(
+    decoration: const BoxDecoration(
+        color: Colors.white,
+        borderRadius: BorderRadius.only(
+          topLeft: Radius.circular(20.0),
+          topRight: Radius.circular(20.0)
+        )
+      ),
+    padding: const EdgeInsets.all(16.0),
+    child: const Align(
+      alignment: AlignmentDirectional.centerStart,
+      child: Text(
+        "Популярные товары",
+        style: TextStyle(
+          fontSize: 20.0, // Увеличение размера шрифта на 20
+          fontWeight: FontWeight.bold,
+          color: Colors.black, // Изменение цвета текста на черный
+        ),
+      ),
+    ),
+  ),
+),
 
           DecoratedSliver(
             decoration: const BoxDecoration(
               color: Colors.white,
-              borderRadius: BorderRadius.all(Radius.circular(20.0))
+              borderRadius: BorderRadius.only(
+                bottomLeft: Radius.circular(20.0),
+                bottomRight: Radius.circular(20.0)
+              )
             ),
             sliver: SliverFixedExtentList(
-            itemExtent: 225,
+            itemExtent: 255,
             delegate: SliverChildBuilderDelegate(
               (BuildContext context, int index) {
                 return SizedBox(
@@ -247,6 +271,111 @@ if (_scrollController.position.userScrollDirection ==
           ),
 
           const SliverToBoxAdapter(
+            child: SizedBox(height: 10.0,),
+          ),
+
+          SliverToBoxAdapter(
+  child: Container(
+      decoration: BoxDecoration(
+        color: Colors.white,
+        borderRadius: BorderRadius.circular(20.0),
+      ),
+      padding: const EdgeInsets.symmetric(vertical: 10.0),
+      child: CarouselSlider(
+        options: CarouselOptions(
+          height: 200.0,
+          enlargeCenterPage: true,
+          enableInfiniteScroll: true,
+        ),
+        items: [
+          '1.jpg',
+          '2.jpg',
+          '3.jpg',
+          '4.jpg',
+          '5.jpg',
+          '6.jpg',
+        ].map((imagePath) {
+          return Builder(
+            builder: (BuildContext context) {
+              return Container(
+                decoration: BoxDecoration(
+                  borderRadius: BorderRadius.circular(10.0),
+                  image: DecorationImage(
+                    image: AssetImage('assets/images/$imagePath'),
+                    fit: BoxFit.cover,
+                  ),
+                ),
+              );
+            },
+          );
+        }).toList(),
+      ),
+    ),
+),
+
+
+          const SliverToBoxAdapter(
+            child: SizedBox(height: 10.0,),
+          ),
+
+          SliverToBoxAdapter(
+  child: Container(
+    decoration: const BoxDecoration(
+        color: Colors.white,
+        borderRadius: BorderRadius.only(
+          topLeft: Radius.circular(20.0),
+          topRight: Radius.circular(20.0)
+        )
+      ),
+    padding: const EdgeInsets.all(16.0),
+    child: const Align(
+      alignment: AlignmentDirectional.centerStart,
+      child: Text(
+        "Популярные магазины",
+        style: TextStyle(
+          fontSize: 20.0, // Увеличение размера шрифта на 20
+          fontWeight: FontWeight.bold,
+          color: Colors.black, // Изменение цвета текста на черный
+        ),
+      ),
+    ),
+  ),
+),
+
+          DecoratedSliver(
+            decoration: const BoxDecoration(
+              color: Colors.white,
+              borderRadius: BorderRadius.only(
+                bottomLeft: Radius.circular(20.0),
+                bottomRight: Radius.circular(20.0)
+              )
+            ),
+            sliver: SliverFixedExtentList(
+            itemExtent: 255,
+            delegate: SliverChildBuilderDelegate(
+              (BuildContext context, int index) {
+                return SizedBox(
+                  height: 225,
+                  child: ListView.builder(
+                    scrollDirection: Axis.horizontal,
+                    itemCount: 100,
+                    itemBuilder: (BuildContext context, int innerIndex) {
+                      // print('First row $innerIndex');
+        final item = popularItems[index % popularItems.length];
+        return PopularItemCard(item: item);
+                    }
+                  ),
+                );
+              },
+              childCount: 1,
+            ),
+
+),
+          ),
+
+          
+
+          const SliverToBoxAdapter(
             child: SizedBox(height: 10.0),
           ),
 
@@ -267,9 +396,104 @@ SliverToBoxAdapter(
   ),
 )
 ),
+
+const SliverToBoxAdapter(
+  child: SizedBox(height: 10.0,),
+),
+
+DecoratedSliver(
+  decoration: const BoxDecoration(color: Colors.white, borderRadius: BorderRadius.all(Radius.circular(20.0))),
+  sliver: SliverPadding(
+  padding: const EdgeInsets.only(right: 10.0, left: 10.0, top: 10.0, bottom: 10.0),
+
+  sliver: SliverGrid(
+    gridDelegate: const SliverGridDelegateWithFixedCrossAxisCount(
+      crossAxisCount: 2,
+mainAxisSpacing: 5.0,
+                  crossAxisSpacing: 5.0,
+                  childAspectRatio: 1.8,
+    ),
+    delegate: SliverChildBuilderDelegate(
+      (BuildContext context, int index) {
+        final item = popularItems[index % popularItems.length];
+        return Container(
+          height: 90.0,
+  decoration: BoxDecoration(
+    color: (index == 0 || index == 9) ? Colors.orange[300] : Colors.purple[100 * (index % 9)],
+    borderRadius: BorderRadius.circular(10.0),
+  ),
+  child: Row(
+    children: [
+      const SizedBox(
+        
+        width: 90, 
+        height: 70,
+        child: Padding(
+            padding: EdgeInsets.only(right: 4.0, left: 5.0), // Отступы сверху и снизу
+            child: Text(
+              'Название товара, которое может быть довольно длинным и должно переноситься на следующую строку при необходимости',
+              maxLines: 2,
+              overflow: TextOverflow.ellipsis,
+              style: TextStyle(fontSize: 16, fontWeight: FontWeight.bold, color: Colors.white),
+            ),
+          ),
+      ),
+      const SizedBox(width: 15), // Пространство между изображением и текстом
+
+      SizedBox(
+        width: 70,
+        height: 90,
+        child: ClipRRect(
+          borderRadius: BorderRadius.circular(10.0),
+          child: CachedNetworkImage(
+            imageUrl: item.imageUrl,
+            fit: BoxFit.cover,
+          ),
+        ),
+      ),
+      
+    ],
+  ),
+);
+
+        },
+    childCount: 10,
+
+    ),
+  )
+),
+),
           const SliverToBoxAdapter(child: SizedBox(height: 10.0),),
+
+
+          SliverToBoxAdapter(
+  child: Container(
+    decoration: const BoxDecoration(
+        color: Colors.white,
+        borderRadius: BorderRadius.only(
+          topLeft: Radius.circular(20.0),
+          topRight: Radius.circular(20.0)
+        )
+      ),
+    padding: const EdgeInsets.all(16.0),
+    child: const Align(
+      alignment: AlignmentDirectional.centerStart,
+      child: Text(
+        "Все товары",
+        style: TextStyle(
+          fontSize: 20.0, // Увеличение размера шрифта на 20
+          fontWeight: FontWeight.bold,
+          color: Colors.black, // Изменение цвета текста на черный
+        ),
+      ),
+    ),
+  ),
+),
           DecoratedSliver(
-            decoration: const BoxDecoration(color: Colors.white, borderRadius: BorderRadius.all(Radius.circular(20.0))),
+            decoration: const BoxDecoration(color: Colors.white, borderRadius: BorderRadius.only(
+              bottomLeft: Radius.circular(20.0),
+              bottomRight: Radius.circular(20.0)
+            )),
             sliver: SliverPadding(
   padding: const EdgeInsets.only(right: 8.0, left: 8.0, top: 20.0),
   sliver: SliverGrid(
@@ -481,9 +705,10 @@ return Container(
                 child: InkWell(
                   borderRadius: BorderRadius.circular(20.0),
                   splashColor:
-                      Colors.grey.withOpacity(0.4), // Цвет волны при нажатии
-                  highlightColor: Colors.grey.withOpacity(0.3),
+                      const Color.fromARGB(255, 131, 129, 129).withOpacity(0.5), // Цвет волны при нажатии
+                  highlightColor: Colors.transparent,
                   splashFactory: InkRipple.splashFactory,
+                  radius: 350.0,
                   onTap: () {
 
                     // Future.delayed(Duration.zero, () {
@@ -498,15 +723,15 @@ return Container(
                     //     ),
                     //   );
                     // });
-                    Navigator.push(
-                        context,
-                        PageRouteBuilder(
-                          pageBuilder: (context, animation1, animation2) =>
-                              const SliverPage(),
-                          transitionDuration: Duration.zero,
-                          reverseTransitionDuration: Duration.zero,
-                        ),
-                      );
+                    // Navigator.push(
+                    //     context,
+                    //     PageRouteBuilder(
+                    //       pageBuilder: (context, animation1, animation2) =>
+                    //           const SliverPage(),
+                    //       transitionDuration: Duration.zero,
+                    //       reverseTransitionDuration: Duration.zero,
+                    //     ),
+                    //   );
                   },
                 ),
               ),
@@ -554,7 +779,7 @@ class PopularItemCard extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Container(
-      margin: const EdgeInsets.symmetric(horizontal: 16.0, vertical: 16.0),
+      margin: const EdgeInsets.only(left: 16.0, right: 16.0, bottom: 16.0, top: 26.0),
       decoration: BoxDecoration(
         color: Colors.orange,
         borderRadius: BorderRadius.circular(10.0),
