@@ -241,9 +241,9 @@ class _MyHomePageState extends State<MyHomePage> {
                   child: Text(
                     "Popular shops",
                     style: TextStyle(
-                      fontSize: 20.0, // Увеличение размера шрифта на 20
+                      fontSize: 20.0, 
                       fontWeight: FontWeight.bold,
-                      color: Colors.black, // Изменение цвета текста на черный
+                      color: Colors.black, 
                     ),
                   ),
                 ),
